@@ -103,11 +103,7 @@ public class PersonEditDialogControlador {
             city = cityField.getText();
             birthday = birthdayField.getText();
 
-            personaControladorJPA controlador = new personaControladorJPA();
-            persona persona = new persona(nombre, grado);
-            persona.setGradoEstudios();
-            controlador.insertarEstudiante(estudiante);
-            System.out.println("Estudiante insertado correctamente.");
+            
 
             okClicked = true;
             dialogStage.close();
