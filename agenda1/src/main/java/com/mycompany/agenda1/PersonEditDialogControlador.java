@@ -4,18 +4,19 @@
  */
 package com.mycompany.agenda1;
 
+import com.mycompany.agenda1.Controlador.personaControladorJPA;
 import com.mycompany.agenda1.modelo.persona;
 import com.mycompany.agenda1.util.DateUti;
+import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-
 /**
  * Dialog to edit details of a person.
- * 
+ *
  * @author Marco Jakob
  */
 public class PersonEditDialogControlador {
@@ -33,7 +34,6 @@ public class PersonEditDialogControlador {
     @FXML
     private TextField birthdayField;
 
-
     private Stage dialogStage;
     private persona person;
     private boolean okClicked = false;
@@ -48,7 +48,7 @@ public class PersonEditDialogControlador {
 
     /**
      * Sets the stage of this dialog.
-     * 
+     *
      * @param dialogStage
      */
     public void setDialogStage(Stage dialogStage) {
@@ -57,7 +57,7 @@ public class PersonEditDialogControlador {
 
     /**
      * Sets the person to be edited in the dialog.
-     * 
+     *
      * @param person
      */
     public void setPerson(persona person) {
@@ -74,7 +74,7 @@ public class PersonEditDialogControlador {
 
     /**
      * Returns true if the user clicked OK, false otherwise.
-     * 
+     *
      * @return
      */
     public boolean isOkClicked() {
@@ -86,13 +86,28 @@ public class PersonEditDialogControlador {
      */
     @FXML
     private void handleOk() {
+
+        String nombre = null;
+        String apellido = null;
+        String calle = null;
+        String codigoPostal = null;
+        String city = null;
+        LocalDate birthday = null;
+
         if (isInputValid()) {
-            person.setFirstName(firstNameField.getText());
-            person.setLastName(lastNameField.getText());
-            person.setStreet(streetField.getText());
-            person.setPostalCode(postalCodeField.getText());
-            person.setCity(cityField.getText());
-            person.setBirthday(DateUti.parse(birthdayField.getText()));
+
+            nombre = firstNameField.getText();
+            apellido = lastNameField.getText();
+            calle = streetField.getText();
+            codigoPostal = postalCodeField.getText();
+            city = cityField.getText();
+            birthday = birthdayField.getText();
+
+            personaControladorJPA controlador = new personaControladorJPA();
+            persona persona = new persona(nombre, grado);
+            persona.setGradoEstudios();
+            controlador.insertarEstudiante(estudiante);
+            System.out.println("Estudiante insertado correctamente.");
 
             okClicked = true;
             dialogStage.close();
@@ -109,35 +124,35 @@ public class PersonEditDialogControlador {
 
     /**
      * Validates the user input in the text fields.
-     * 
+     *
      * @return true if the input is valid
      */
     private boolean isInputValid() {
         String errorMessage = "";
 
         if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-            errorMessage += "No valid first name!\n"; 
+            errorMessage += "No valid first name!\n";
         }
         if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
-            errorMessage += "No valid last name!\n"; 
+            errorMessage += "No valid last name!\n";
         }
         if (streetField.getText() == null || streetField.getText().length() == 0) {
-            errorMessage += "No valid street!\n"; 
+            errorMessage += "No valid street!\n";
         }
 
         if (postalCodeField.getText() == null || postalCodeField.getText().length() == 0) {
-            errorMessage += "No valid postal code!\n"; 
+            errorMessage += "No valid postal code!\n";
         } else {
             // try to parse the postal code into an int.
             try {
                 Integer.parseInt(postalCodeField.getText());
             } catch (NumberFormatException e) {
-                errorMessage += "No valid postal code (must be an integer)!\n"; 
+                errorMessage += "No valid postal code (must be an integer)!\n";
             }
         }
 
         if (cityField.getText() == null || cityField.getText().length() == 0) {
-            errorMessage += "No valid city!\n"; 
+            errorMessage += "No valid city!\n";
         }
 
         if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
